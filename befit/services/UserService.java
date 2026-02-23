@@ -37,6 +37,7 @@ public class UserService {
         userResponse.setPassword(savedUser.getPassword());
         userResponse.setCreatedAt(savedUser.getCreatedAt());
         userResponse.setModifiedAt(savedUser.getModifiedAt());
+
         return userResponse;
     }
     //Show profile in user controller "/userId" path
@@ -57,6 +58,9 @@ public class UserService {
         return userResponse;
     }
 
+    public Boolean existsUserById(String userId) {
+        return userRepository.existsById(userId);
+    }
 }
 
 
