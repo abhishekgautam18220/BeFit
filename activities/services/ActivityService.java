@@ -5,18 +5,28 @@ import com.activities.DataTransferObject.ActivityResponse;
 import com.activities.model.Activity;
 import com.activities.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final UserValidationService userValidationService;
+    private final RabbitTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
+
 
     //activity creation and record;
     public ActivityResponse trackActivity(ActivityRequest request) {
@@ -38,6 +48,13 @@ public class ActivityService {
                 .updateTime(now)
                 .build();
         Activity savedActivity = activityRepository.save(activity);
+
+        //Send data to Rabbitmq
+        try{
+            rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
+        }catch(Exception e){
+            log.error("Error sending activity to RabbitMQ");
+        }
 
         return convertToActivityResponse(savedActivity);
     }
