@@ -1,11 +1,10 @@
 package com.geminiIntegrate.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class Activity {
 
     private Long id;

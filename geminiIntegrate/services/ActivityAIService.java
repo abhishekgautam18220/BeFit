@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geminiIntegrate.model.Activity;
 import com.geminiIntegrate.model.Recommendation;
-import com.geminiIntegrate.services.GeminiService;
-
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +16,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-@Builder
+@Data
 @RequiredArgsConstructor
 public class ActivityAIService {
     private final GeminiService geminiService;
@@ -155,7 +153,7 @@ public class ActivityAIService {
           "improvements": [
             {
               "area": "Area name",
-              "recommendation": "Detailed recommendation"
+              "recommendation": "Detailed recommendation in points with heading"
             }
           ],
           "suggestions": [
@@ -174,7 +172,7 @@ public class ActivityAIService {
         Activity Type: %s
         Duration: %d minutes
         Calories Burned: %d
-        Additional Metrics: %s
+        
         
         Provide detailed analysis focusing on performance, improvements, next workout suggestions, and safety guidelines.
         Ensure the response follows the EXACT JSON format shown above.
@@ -182,7 +180,6 @@ public class ActivityAIService {
                 activity.getType(),
                 activity.getDuration(),
                 activity.getCaloriesBurned()
-
         );
     }
 }

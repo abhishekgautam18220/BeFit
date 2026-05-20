@@ -11,5 +11,4 @@ public class GeminiMain {
     public static void main(String[] args) {
         SpringApplication.run(GeminiMain.class, args);
     }
-
 }
