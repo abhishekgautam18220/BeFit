@@ -30,13 +30,13 @@ public class ActivityService {
 
     //activity creation and record;
     public ActivityResponse trackActivity(ActivityRequest request) {
-
         LocalDateTime now = LocalDateTime.now();
         boolean isValidUser = userValidationService.validateUser(request.getUserId());
 
-        if(!isValidUser) {
-            throw new RuntimeException("Invalid user"+ request.getUserId());
+        if (!isValidUser) {
+            throw new RuntimeException("Invalid user" + request.getUserId());
         }
+
         Activity activity = Activity.builder()
                 .userId(request.getUserId())
                 .activityType(request.getActivityType())
@@ -47,13 +47,14 @@ public class ActivityService {
                 .creationTime(now)
                 .updateTime(now)
                 .build();
+
         Activity savedActivity = activityRepository.save(activity);
 
-        //Send data to Rabbitmq
-        try{
+        try {
             rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
-        }catch(Exception e){
-            log.error("Error sending activity to RabbitMQ");
+            log.info("Activity sent to RabbitMQ: {}", savedActivity.getId());
+        } catch (Exception e) {
+            log.error("Error sending activity to RabbitMQ: {}", e.getMessage(), e);
         }
 
         return convertToActivityResponse(savedActivity);
