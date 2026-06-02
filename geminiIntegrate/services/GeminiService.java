@@ -18,15 +18,17 @@ public class GeminiService {
     }
 
     public String getAnswer(String prompt){
-        Map<String, Object> requestBody = Map.of(
-                "contents", List.of(
-                Map.of(
-                "parts", List.of(
-                Map.of("text", prompt)
+        Map<String, Object> requestBody =
+                Map.of("contents",
+                        List.of(
+                            Map.of("parts",
+                                List.of(Map.of("text", prompt)
                                 )
+                            )
                         )
-                )
-        );
+                );
+
+
         return webClient.post()
                 .uri(geminiAPI)
                 .bodyValue(requestBody)

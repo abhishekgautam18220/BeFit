@@ -27,9 +27,9 @@ public class ActivityMessageListener {
             recommendationRepository.save(recommendation);
             log.info("Saved successfully for activityId: {}", activity.getId());
         } catch (WebClientResponseException.TooManyRequests e) {
-            log.warn("Gemini rate limited, waiting 30 seconds before retry...");
+            log.warn("Gemini rate limited, waiting 3 seconds before retry...");
             try {
-                Thread.sleep(30000); // wait 30s before RabbitMQ redelivers
+                Thread.sleep(300); // wait 3s before RabbitMQ redelivers
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
