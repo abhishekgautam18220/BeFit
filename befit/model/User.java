@@ -14,6 +14,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(unique = true)
+    private String keycloakId;
+
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
